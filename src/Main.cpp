@@ -1,5 +1,5 @@
-#include "libphx/Engine.h"
-#include "libphx/Lua.h"
+#include "Engine.h"
+#include "Lua.h"
 
 #if WINDOWS
 extern "C" {

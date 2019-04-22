@@ -7,9 +7,10 @@ LINK := clang++
 PROJECT := lt
 
 SRCPATH := src
+OBJPATH := ./obj
+OUTDIR  := ./bin
 OUTFILE := $(PROJECT)64
-OBJPATH = ./obj
-OUTPATH = ./bin/$(OUTFILE)
+OUTPATH := $(OUTDIR)/$(OUTFILE)
 
 SOURCES := $(shell find $(SRCPATH)/ -type f -name '*.cpp')
 OBJECTS := $(patsubst $(SRCPATH)/%.cpp, $(OBJPATH)/%.o, $(SOURCES))
@@ -30,7 +31,8 @@ CFLAGS += -ffast-math
 CFLAGS += -O3 -msse -msse2 -msse3 -msse4
 CFLAGS += -DDEBUG=0
 CFLAGS += -g
-CFLAGS += -Iext/include/
+CFLAGS += -Ilibphx/include/
+CFLAGS += -Ilibphx/ext/
 CFLAGS += -std=c++11
 CFLAGS += -Wno-unused-variable
 
@@ -49,6 +51,7 @@ run: $(OUTPATH)
 	$(OUTPATH)
 
 $(OUTPATH): $(OBJECTS)
+	@mkdir -p $(OUTDIR)
 	@echo [LINK] $(OUTPATH)
 	@$(LINK) -o $(OUTPATH) $(OBJECTS) $(CFLAGS) $(LIBS)
 
