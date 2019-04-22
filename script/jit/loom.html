@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+	{@ traces, funcs}
+	{%
+		local loom = require 'jit.loom'
+		local function class(t)
+			if not t then return '' end
+			o = {}
+			for k, v in pairs(t) do
+				if v then o[#o+1] = k end
+			end
+			if #o == 0 then return '' end
+			return 'class="'..table.concat(o, ' ')..'"'
+		end
+
+		local _ft_, _fndx_ = {}, 0
+		local function funclabel(f)
+			if not f then return '' end
+			if _ft_[f] == nil then
+				_fndx_ = _fndx_+1
+				_ft_[f] = ('fn%03d'):format(_fndx_)
+			end
+			return _ft_[f]
+		end
+
+		local function lines(s)
+			s = s or ''
+			local o = {}
+			for l in s:gmatch('[^\r\n]+') do
+				o[#o+1] = l
+			end
+			return o
+		end
+
+		local function cols(s, cwl)
+			local o, start = {}, 1
+			for i, w in ipairs(cwl) do
+				o[i] = s:sub(start, start+w-1):gsub('%s+$', '')
+				start = start+w
+			end
+			return o
+		end
+
+		local function is_irref(f)
+			if f:match('^%d%d%d%d$') then
+				return 'ref_'..f
+			end
+		end
+
+		local function all_refs(s)
+			c = {}
+			for ref in s:gmatch('%d+') do
+				c[#c+1] = is_irref(ref)
+			end
+			return table.concat(c, ' ')
+		end
+
+		local function table_ir(txt)
+			local o = lines(txt)
+			local cwl = {5, 6, 3, 4, 7, 6, 1000}
+			for i, l in ipairs(o) do
+				l = cols(l, cwl)
+				local class = {is_irref(l[1])}
+				if l[5] == 'SNAP' then
+					class[#class+1] = 'snap_'..l[6]:sub(2)
+					l.title = l[7]
+					l[7] = ('<span class="opt">%s</span>'):format(l[7])
+				end
+				l.class = next(class) and table.concat(class, ' ')
+				o[i] = l
+			end
+			return o
+		end
+
+		local function annot_mcode(txt)
+			if type(txt) ~= 'string' then return '' end
+			txt = txt:gsub('%(exit (%d+)/(%d+)%)', function (a, b)
+				a, b = tonumber(a), tonumber(b)
+				return ('(exit %d/%d [n=%d])'):format(a, b, traces[a].exits[b] or 0)
+			end)
+			txt = _e(txt)
+			txt = txt:gsub('Trace #(%d+)', function (tr)
+				return ('<span class="tr%03d">Trace #%d</span>'):format(
+					tr, tr)
+			end)
+			return txt
+		end
+
+		local cmdline = 'Loom Output'
+		local annotated = loom.annotated(funcs, traces)
+	%}
+	<head>
+		<meta charset="utf-8" />
+		<style media="screen" type="text/css">
+			.code {
+				font-family: monospace;
+				white-space: pre;
+				tab-size: 2;
+			}
+			.opt { display: none; }
+			.codespan {
+				width: 100%;
+			}
+			.bordertop td {
+				border-top: thin lightgray solid;
+			}
+			.phantom {
+				color: #ccc;
+			}
+			.white {
+				background-color: white;
+			}
+			.hilight {
+				background-color: lightsteelblue;
+			}
+			{% for f, fi in pairs(funcs) do %}.{{funclabel(f)}} {
+				background-color: hsla({{math.random(360)}}, 100%, 90%, 1);
+			}
+			{% end %}
+
+			{% for i = 1, table.maxn(traces) do %}{{:'.tr%03d', i}} {
+				background-color: hsla({{math.random(360)}}, 80%, 75%, 1);
+			}
+			{% end %}
+		</style>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script>
+			var sameref = function (elm, parent) {
+				var refmatch = elm.className.match(/ref_\d+/);
+				return refmatch ? $(elm).closest(parent).find('.'+refmatch[0])
+						: $();
+				return $(elm).closest(parent).find('.'+refclass);
+			}
+			$(function() {
+				$('th.bc').click(function(e) {
+					$('.bc .opt').toggle();
+				});
+				$('th.ir').click(function(e) {
+					$('.ir .opt').toggle();
+				});
+				$('th.titlebar').click(function(e) {
+					$(e.target).closest('tr').siblings().toggle();
+				});
+				$('[class^="ref_"]').mouseenter(function(e) {
+					sameref(e.target, '.ir').addClass('hilight');
+				}).mouseleave(function(e){
+					sameref(e.target, '.ir').removeClass('hilight');
+				});
+			});
+		</script>
+		<title>{{cmdline}}</title>
+	</head>
+	<body>
+	<h2>{{=cmdline:gsub('\\[\r\n]+',"<br/>")}}</h2>
+	<table class="code" cellpadding="0" cellspacing="0">
+		{% for filename, filedata in pairs(annotated) do
+			local lastline
+			%}
+			<tr>
+				<th colspan="2">{{ filename }}</th>
+				<th colspan="3">Bytecode</th>
+			</th>
+			{% for i, l in loom.sortedpairs(filedata) do
+				local notsame = l.i ~= lastline
+				lastline = l.i
+				%}
+			<tr {{= class{bordertop=notsame and l.bc ~= ''} }}>
+				<td {{= class{phantom=l.back} }}> {{ notsame and l.i or '' }} </td>
+				<td {{= class{phantom=l.back} }}> {{ notsame and l.src or '' }} </td>
+				<td {{= class{[funclabel(l.func)] = l.bc ~= ''} }}> {{ l.bc }} </td>
+				<td>{% for i, tr in ipairs(l.tr or {}) do
+					local trref = ('tr%03d'):format(tr[1])
+					local lnref = ('tr%03d_%03d'):format(tr[1], tr[2])
+					%} <a href="#{{trref}}" name="{{lnref}}"><span
+						id="{{lnref}}"
+						class="{{trref}}"
+					>{{tr[1]}}/{{tr[2]}}</span></a> {%
+				end %}</td>
+				<td>{% for msg, n in pairs(l.evt or {}) do
+					%} <span>"{{msg}}" [n={{n}}]</span> {%
+				end %}</td>
+			</tr>
+			{% end %}
+		{% end %}
+	</table>
+
+	{% for i, tr in loom.allipairs(traces) do local prevsrc%}
+		<br/>
+		<a name="#{{:'tr%0dd', i}}"><table class="popup trace {{:'tr%03d', i}}" id="{{:'tr%03d', i}}" cellpadding="4">
+			<tr>
+				<th colspan="3" class="titlebar">Trace #{{i}}: {{tr.tracelabel}}</th>
+			</tr>
+			<tr class="white">
+				<th class="bc" >bytecode</th>
+				<th class="ir" >IR</th>
+				<th class="mcode" >mcode</th>
+			</tr>
+			<tr class="white" valign="top">
+				<td class="code bc"><table cellpadding="0" cellspacing="0">
+					{% for j, rec in ipairs(tr.rec) do
+						local f, pc, l, src = unpack(rec)
+						local srcline = src and ('%s:%d %s'):format(src.name, src.i, src.l or '')
+						local lnref = ('tr%03d_%03d'):format(i, j)
+						%}
+					<tr class="code">
+						<td class="{{:'tr%03d', i}}"><a href="#{{lnref}}">{{i}}/{{j}}</a> </td>
+						<td class="{{funclabel(f)}}"> {{l}} </td>
+						<td class="src opt">{{srcline ~= prevsrc and srcline or ''}}</td>
+					</tr>
+					{% prevsrc = srcline
+					end %}
+				</table></td>
+				<td class="code ir"><table>
+					{%for _, l in ipairs(table_ir(tr.ir)) do %}
+						<tr class="{{=l.class or ''}}" title="{{=l.title}}">{% for _, f in ipairs(l) do %}
+							<td class="{{=all_refs(f)}}">{{=f}}</td>
+						{% end %}</tr>
+					{% end %}
+				</table></td>
+				<td class="code mcode">{{=annot_mcode(tr.mcode)}}</td>
+			</tr>
+		</table></a>
+	{% end %}
+	</body>
+</html>
