@@ -1,9 +1,9 @@
 PHX = {}
 
-PHX.Ext  = requireAll('phx.ext')
-PHX.Lib  = require('phx.libphx')
+PHX.Ext  = requireAll('ffiext')
+PHX.Lib  = require('ffi.libphx')
 
-PHX.FFI  = requireAll('phx.ffi')
+PHX.FFI  = requireAll('ffi')
 Namespace.Inline(PHX.FFI, 'PHX.FFI')
 Namespace.Inject(PHX, 'PHX', PHX.FFI, 'PHX.FFI')
 

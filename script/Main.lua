@@ -1,3 +1,4 @@
+package.path = package.path .. ';./libphx/script/?.lua'
 package.path = package.path .. ';./script/?.lua'
 package.path = package.path .. ';./script/?.ext.lua'
 package.path = package.path .. ';./script/?.ffi.lua'
@@ -8,8 +9,8 @@ Env.Call(function ()
   require('phx.phx')
   GlobalRestrict.On()
 
-  dofile('Config.App.lua')
-  if io.exists ('Config.Local.lua') then dofile('Config.Local.lua') end
+  dofile('./script/Config.App.lua')
+  if io.exists ('./script/Config.Local.lua') then dofile('./script/Config.Local.lua') end
 
   Namespace.LoadInline('Util')
   Namespace.Load      ('UI')
