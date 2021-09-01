@@ -1,0 +1,4 @@
+4|~adjective| |~nounex
+4|~qualifier| |~nounex
+6|~nounex
+1|~person|'s |~nounex

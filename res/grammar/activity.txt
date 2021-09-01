@@ -1,0 +1,9 @@
+1|Border
+1|Construction
+1|Mining
+1|Production
+1|Research
+1|Science
+1|Scouting
+1|Surveying
+1|Trading

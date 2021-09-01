@@ -1,0 +1,2 @@
+1|~adjective| |~nounex
+1|~qualifier| |~nounex

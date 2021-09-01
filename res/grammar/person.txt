@@ -1,0 +1,12 @@
+1|cauchy
+1|dirichlet
+1|euler
+1|fourier
+1|hilbert
+1|gauss
+1|jacobi
+1|lagrange
+1|laplace
+1|newton
+1|riemann
+1|zeno

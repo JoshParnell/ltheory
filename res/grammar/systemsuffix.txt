@@ -1,0 +1,5 @@
+1|~digits
+1|~number
+1|Major
+1|Minor
+1|Prime

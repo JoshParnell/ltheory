@@ -1,0 +1,15 @@
+1|death
+1|doom
+1|fire
+1|flame
+1|fury
+1|ice
+1|justice
+1|lava
+1|magma
+1|matter
+1|nova
+1|shock
+1|vengeance
+1|wind
+1|wrath

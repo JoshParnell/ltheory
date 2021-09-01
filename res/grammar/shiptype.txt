@@ -1,0 +1,6 @@
+3|~bird
+2|~snake
+1|~shipprefix| |~bird
+1|~shipprefix| |~snake
+2|~color| |~snake
+2|~color| |~bird

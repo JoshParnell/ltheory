@@ -1,0 +1,8 @@
+~bird
+~bird
+~bird
+~bird
+~snake
+~snake
+~color| |~snake
+~color| |~bird

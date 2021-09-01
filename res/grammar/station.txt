@@ -1,0 +1,3 @@
+3|~stationmidfix
+2|~stationmidfix| |~stationsuffix
+1|~stationmidfix| |~activity| |~stationsuffix

@@ -1,0 +1,11 @@
+1|zero
+1|one
+1|two
+1|three
+1|four
+1|five
+1|six
+1|seven
+1|eight
+1|nine
+1|ten

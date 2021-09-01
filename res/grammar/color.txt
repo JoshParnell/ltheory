@@ -1,0 +1,12 @@
+2|black
+2|red
+1|blue
+1|green
+1|crystal
+1|red
+1|white
+1|yellow
+1|ruby
+1|saphire
+1|jade
+1|onyx

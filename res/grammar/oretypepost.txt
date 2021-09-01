@@ -1,0 +1,2 @@
+3|~vowel|~consonant|ite
+1|~vowel|~consonant|ium

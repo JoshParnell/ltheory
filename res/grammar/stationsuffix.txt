@@ -1,0 +1,4 @@
+1|Base
+1|Facility
+1|Outpost
+1|Station

@@ -1,0 +1,91 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PHX Dashboard</title>
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/vader/jquery-ui.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo+2">
+
+  <style>
+  body {
+    background: url("http://c1.staticflickr.com/8/7291/16396764582_023ba5f8a3_h.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: #F0F0F0;
+    cursor: default;
+    font-family: 'Exo 2', sans-serif;
+    margin: 0;
+  }
+
+  .titlebar {
+    background-color: rgba(20, 20, 20, 0.5);
+    border: 1px solid #000000;
+    box-shadow:
+      inset 0 0 20px 0px rgba(30,40,60,0.9),
+      inset 0 0 20px 0px rgba(0,0,0,0.8),
+      0 0 1px 1px rgba(48,64,80,0.8),
+      0 0 40px 4px rgba(0,0,0,0.8);
+    padding: 2px 16px 2px 32px;
+    text-shadow: 0 0 black;
+  }
+
+  .sbox {
+    border: 1px solid #000000;
+    border-radius: 8px;
+    box-shadow:
+      inset 0 0 20px 0px rgba(30,40,60,0.9),
+      inset 0 0 20px 0px rgba(0,0,0,0.8),
+      0 0 1px 1px rgba(48,64,80,0.8),
+      0 0 40px 4px rgba(0,0,0,0.8);
+    background-color: rgba(10, 10, 10, 0.7);
+    margin: 32px;
+    padding: 16px;
+    text-shadow: 0 0 black;
+  }
+
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <script>
+    $(function () {
+      $(".slider").each(function(){
+        var id = $( this ).attr("id");
+        var label = $("#" + id + "_label");
+        label.text(label.attr("name") + ": 0");
+
+        $( this ).slider({
+        slide: function (event, ui) {
+          label.text(label.attr("name") + ": " + ui.value);
+          $.ajax({ type: "POST", data: id + "=" + ui.value, });
+        },
+
+        })})
+    });
+  </script>
+
+</head>
+<body>
+
+<div class="titlebar">
+  <h3>// PHX ENGINE DASH //</h3>
+</div>
+
+<div class="sbox">
+  <h4 id="v1_label" name="Blur Radius">0</h4><div class="slider" id="v1"></div>
+  <h4 id="v2_label" name="Skippy Booooomba">0</h4><div class="slider" id="v2"></div>
+  <h4 id="v3_label" name="Loopa[][]Wabba">0</h4><div class="slider" id="v3"></div>
+</div>
+
+<div class="sbox">
+  <h4 id="v4_label" name="NG'UNNA">0</h4><div class="slider" id="v4"></div>
+  <h4 id="v5_label" name="Chriotalasama">0</h4><div class="slider" id="v5"></div>
+  <h4 id="v6_label" name="Xyz Chromophosphorescence">0</h4><div class="slider" id="v6"></div>
+</div>
+
+</body>
+</html>
