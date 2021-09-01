@@ -135,15 +135,15 @@ end
 function TypeT:new ()
   -- Block size is chosen such that each block is one page of memory
   local blockSize = max(1, floor(0x1000 / self:getSize()))
-  self.pool = libphx.MemPool_Create(self:getSize(), blockSize)
+  self.pool = MemPool.Create(self:getSize(), blockSize)
   self.new = function (T)
-    local instance = ffi.cast(T.ptrName, libphx.MemPool_Alloc(T.pool))
+    local instance = ffi.cast(T.ptrName, MemPool.Alloc(T.pool))
     for i = 1, #T.onConstruct do T.onConstruct[i](instance) end
     return instance
   end
   self.delete = function (T, instance)
     for i = 1, #T.onDestruct do T.onDestruct[i](instance) end
-    libphx.MemPool_Dealloc(T.pool, instance)
+    MemPool.Dealloc(T.pool, instance)
   end
   return self:new()
 end
