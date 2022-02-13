@@ -171,6 +171,16 @@ function System:spawnAsteroidField (count, oreCount)
   self:addZone(zone)
 end
 
+function System:spawnPlanet ()
+  local rng = self.rng
+  local planet = Entities.Planet(rng:get64())
+  local pos = rng:getDir3():scale(kSystemScale * (1.0 + rng:getExp()))
+  local scale = 1e5 * rng:getErlang(2)
+  planet:setPos(pos)
+  planet:setScale(scale)
+  self:addChild(planet)
+end
+
 function System:spawnShip ()
   if not self.shipType then
     self.shipType = ShipType(self.rng:get31(), Gen.Ship.ShipFighter, 4)

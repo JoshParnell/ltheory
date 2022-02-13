@@ -12,12 +12,13 @@ local Planet = subclass(Entity, function (self, seed)
   -- TODO : Had to lower quality to 2 because RigidBody is automatically
   --        building BSP, and sphere is pathological case for BSPs. Need
   --        generalized CollisionShape.
-  local mesh = Gen.Primitive.IcoSphere(2):managed()
+  local mesh = Gen.Primitive.IcoSphere(5):managed()
+
   self:addRigidBody(true, mesh)
   self:setMass(1000)
 
   self.mesh = mesh
-  self.meshAtmo = Gen.Primitive.IcoSphere(2):managed()
+  self.meshAtmo = Gen.Primitive.IcoSphere(5):managed()
   self.meshAtmo:computeNormals()
   self.meshAtmo:invert()
 

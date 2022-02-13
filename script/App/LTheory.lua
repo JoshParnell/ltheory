@@ -39,6 +39,10 @@ function LTheory:generate ()
   for i = 1, 1 do
     self.system:spawnAsteroidField(500, 10)
   end
+
+  for i = 1, 1 do
+    self.system:spawnPlanet()
+  end
 end
 
 function LTheory:onInit ()

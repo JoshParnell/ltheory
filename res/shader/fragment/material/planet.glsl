@@ -1,4 +1,5 @@
 #include fragment
+#include deferred
 #include math
 #include color
 #include noise
@@ -85,6 +86,12 @@ void main() {
   color = atmo.xyz + color * (1.0 - atmo.w);
 #endif
 
-  gl_FragColor = vec4(color, 1.0);
   FRAGMENT_CORRECT_DEPTH;
+
+  setAlbedo(color);
+  setAlpha(1.0);
+  setDepth();
+  setNormal(N);
+  setRoughness(1.0);
+  setMaterial(Material_NoShade);
 }
