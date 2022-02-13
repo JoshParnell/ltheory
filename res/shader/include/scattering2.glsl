@@ -194,7 +194,7 @@ vec4 atmosphere(
 
 const vec3 kRayleigh = 2.0 * vec3(5.5, 13.0, 22.4);
 const float kMie = 5;
-const float hRayleigh = 0.15;
+const float hRayleigh = 0.1;
 const float hMie = 0.03;
 const float pMie = 0.758;
 
