@@ -26,17 +26,6 @@ set (PLATARCH "${PLATFORM}${ARCH}")
 
 add_subdirectory (libphx)
 
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${PLATARCH}")
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${PLATARCH}")
-set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${PLATARCH}")
-
-foreach (config ${CMAKE_CONFIGURATION_TYPES})
-  string (TOUPPER ${config} config)
-  set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_${config} "${CMAKE_SOURCE_DIR}/bin/${PLATARCH}")
-  set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_${config} "${CMAKE_SOURCE_DIR}/bin/${PLATARCH}")
-  set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${config} "${CMAKE_SOURCE_DIR}/bin/${PLATARCH}")
-endforeach (config)
-
 add_executable (lt "src/Main.cpp")
 
 target_compile_definitions (lt PRIVATE DEBUG=0)
