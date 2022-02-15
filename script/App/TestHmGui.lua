@@ -63,7 +63,7 @@ local todo = {
 }
 
 function Test:onInit ()
-  self.bg = Tex2D.Load('./screenshot/wp2.png')
+  -- self.bg = Tex2D.Load('./screenshot/wp2.png')
   self.renderer = Renderer()
 end
 
@@ -190,7 +190,7 @@ function Test:showTodoInner ()
   HmGui.BeginScroll(256)
   HmGui.SetSpacing(8)
     for _, group in ipairs(todo) do
-      HmGui.TextEx(Cache.Font('ShentoxMedium', 18), group.name, 1, 1, 1, 1)
+      HmGui.TextEx(Cache.Font('Rajdhani', 18), group.name, 1, 1, 1, 1)
       HmGui.BeginGroupY()
         HmGui.SetSpacing(2)
         HmGui.SetPaddingLeft(12)
@@ -220,7 +220,7 @@ end
 function Test:onUpdate (dt)
   Profiler.Begin('HmGui.Update')
   HmGui.Begin(self.resX, self.resY)
-    HmGui.Image(self.bg)
+    -- HmGui.Image(self.bg)
     self:showSimple()
     -- self:showMetrics()
     self:showTodo()

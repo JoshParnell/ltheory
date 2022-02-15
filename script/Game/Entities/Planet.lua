@@ -32,7 +32,7 @@ local Planet = subclass(Entity, function (self, seed)
 
   self.cloudLevel = rng:getUniformRange(-0.2, 0.15)
   self.oceanLevel = rng:getUniform() ^ 1.5
-  self.atmoScale = 1.05
+  self.atmoScale = 1.1
 
   self.color1 = genColor(rng)
   self.color2 = genColor(rng)

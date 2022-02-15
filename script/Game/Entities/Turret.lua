@@ -87,27 +87,20 @@ function Turret:canFire ()
 end
 
 function Turret:fire ()
-  -- TODO : Reimplment once Pulse has a functional replacement
-  if false then
-    local e = Entities.Pulse()
-    local dir = (self:getForward() + rng:getDir3():scale(self.projSpread * rng:getExp())):normalize()
-    e.pos = self:toWorld(Vec3f(0, 0, 0))
-    e.vel = dir:scale(self.projSpeed) + self:getParent():getVelocity()
-    e.dir = dir
-    assert(e.dir:length() >= 0.9)
-    e.lifeMax = self.projLife
-    e.life = e.lifeMax
+  local e = self:getRoot():addProjectile(self:getParent())
+  local dir = (self:getForward() + rng:getDir3():scale(self.projSpread * rng:getExp())):normalize()
+  e.pos = self:toWorld(Vec3f(0, 0, 0))
+  e.vel = dir:scale(self.projSpeed) + self:getParent():getVelocity()
+  e.dir = dir
+  assert(e.dir:length() >= 0.9)
+  e.lifeMax = self.projLife
+  e.life = e.lifeMax
 
-    -- NOTE : In the future, it may be beneficial to store the actual turret
-    --        rather than the parent. It would allow, for example, data-driven
-    --        AI threat analysis by keeping track of which weapons have caused
-    --        the most real damage to it, allowing for optimal sub-system
-    --        targetting.
-    e.source = self:getParent().ref
-    self:getRoot():addChild(e)
-  else
-    print('Firing no longer works')
-  end
+  -- NOTE : In the future, it may be beneficial to store the actual turret
+  --        rather than the parent. It would allow, for example, data-driven
+  --        AI threat analysis by keeping track of which weapons have caused
+  --        the most real damage to it, allowing for optimal sub-system
+  --        targetting.
   self.cooldown = 1.0
   self.heat = self.heat + 1
 end

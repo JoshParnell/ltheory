@@ -24,7 +24,7 @@ Settings.addFloat ('postfx.vignette.hardness',   ' - Hardness', 20.0, 2, 32)
 
 Settings.addFloat ('render.fovY',        'FOV',                   70, 50, 100)
 Settings.addFloat ('render.lodScale',    'LOD Scale',             0.3, 0.1, 1.0)
-Settings.addEnum  ('render.superSample', 'SuperSampling',         1, { 'Off', '2x', '4x' })
+Settings.addEnum  ('render.superSample', 'SuperSampling',         2, { 'Off', '2x', '4x' })
 Settings.addBool  ('render.wireframe',   'Wireframe',             false)
 Settings.addBool  ('render.cullface',    'Backface Culling',      true)
 Settings.addFloat ('render.logZNear',    'Log Z Near',            -1, -2, 3)

@@ -1,12 +1,6 @@
---[[ TODO ----------------------------------------------------------------------
-  All of this needs to die. Projectiles should be handled by a dedicated
-  projectile system.
-----------------------------------------------------------------------------]]--
-
-if false then
 local Entity = require('Game.Entity')
 
-local Pulse = CType.Subclass('Pulse', Entity)
+local Pulse = CType.Struct('Pulse', Entity)
 Pulse:add(CType.Int32,   'source' )
 Pulse:add(CType.Vec3f,   'pos'    )
 Pulse:add(CType.Vec3f,   'vel'    )
@@ -53,42 +47,44 @@ function Pulse:refreshMatrix ()
   self.matrix = Matrix.LookUp(self.pos, self.dir, Math.OrthoVector(self.dir))
 end
 
-function Pulse.RenderAdditive (ents, state)
-  do -- Heads
-    Profiler.Begin('Pulse.RenderAdditive.Head')
-    local shader = shaderHead
-    shader:start()
-    Shader.SetFloat3('color', 1.0, 1.3, 2.0)
-    meshHead:drawBind()
-    for i = 1, #ents do
-      local self = ents[i]
-      Shader.ISetFloat(cacheHead.size, 16)
-      Shader.ISetFloat(cacheHead.alpha, self.life / self.lifeMax)
-      Shader.ISetMatrix(cacheHead.mWorld, self.matrix)
-      meshHead:drawBound()
+function Pulse.Render (ents, state)
+  if state.mode == BlendMode.Additive then
+    do -- Heads
+      Profiler.Begin('Pulse.RenderAdditive.Head')
+      local shader = shaderHead
+      shader:start()
+      Shader.SetFloat3('color', 1.0, 1.3, 2.0)
+      meshHead:drawBind()
+      for i = 1, #ents do
+        local self = ents[i]
+        Shader.ISetFloat(cacheHead.size, 16)
+        Shader.ISetFloat(cacheHead.alpha, self.life / self.lifeMax)
+        Shader.ISetMatrix(cacheHead.mWorld, self.matrix)
+        meshHead:drawBound()
+      end
+      meshHead:drawUnbind()
+      shader:stop()
+      Profiler.End()
     end
-    meshHead:drawUnbind()
-    shader:stop()
-    Profiler.End()
-  end
 
-  do -- Tails
-    Profiler.Begin('Pulse.RenderAdditive.Tail')
-    local shader = shaderTail
-    shader:start()
-    Shader.SetFloat3('color', 1.0, 1.3, 2.0)
-    meshTail:drawBind()
-    for i = 1, #ents do
-      local self = ents[i]
-      Shader.ISetFloat(cacheTail.alpha, self.life / self.lifeMax)
-      Shader.ISetFloat2(cacheTail.size, 16, min(Config.game.pulseSize, 2.0 * self.dist))
-      Shader.ISetFloat3(cacheTail.axis, self.dir.x, self.dir.y, self.dir.z)
-      Shader.ISetMatrix(cacheTail.mWorld, self.matrix)
-      meshTail:drawBound()
+    do -- Tails
+      Profiler.Begin('Pulse.RenderAdditive.Tail')
+      local shader = shaderTail
+      shader:start()
+      Shader.SetFloat3('color', 1.0, 1.3, 2.0)
+      meshTail:drawBind()
+      for i = 1, #ents do
+        local self = ents[i]
+        Shader.ISetFloat(cacheTail.alpha, self.life / self.lifeMax)
+        Shader.ISetFloat2(cacheTail.size, 16, min(Config.game.pulseSize, 2.0 * self.dist))
+        Shader.ISetFloat3(cacheTail.axis, self.dir.x, self.dir.y, self.dir.z)
+        Shader.ISetMatrix(cacheTail.mWorld, self.matrix)
+        meshTail:drawBound()
+      end
+      meshTail:drawUnbind()
+      shader:stop()
+      Profiler.End()
     end
-    meshTail:drawUnbind()
-    shader:stop()
-    Profiler.End()
   end
 end
 
@@ -130,4 +126,3 @@ function Pulse.Update (ents, dt)
 end
 
 return Pulse
-end

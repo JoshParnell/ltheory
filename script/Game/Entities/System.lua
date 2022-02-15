@@ -5,6 +5,7 @@ require('Game.Content')
 
 local System = subclass(Entity, function (self, seed)
   self:addChildren()
+  self:addProjectiles()
   self:addEconomy()
 
   -- NOTE : For now, we will use a flow component on the system to represent
@@ -42,6 +43,7 @@ end
 
 function System:render (state)
   self:send(Event.Broadcast(state))
+  self:renderProjectiles(state)
   self.dust:render(state)
   self.nebula:render(state)
 end
@@ -62,6 +64,8 @@ function System:update (dt)
   Profiler.Begin('Broadcast Update')
   self:send(Event.Broadcast(event))
   Profiler.End()
+
+  self:updateProjectiles(dt)
 
   Profiler.Begin('Physics Update')
   self.physics:update(dt)
