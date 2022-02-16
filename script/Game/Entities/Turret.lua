@@ -37,7 +37,7 @@ Turret = subclass(Entity, function (self)
   end
 
   self:addRigidBody(true, shared.mesh)
-  self:addVisibleMesh(shared.mesh, Material.Debug())
+  self:addVisibleMesh(shared.mesh, material)
   -- TODO : Tracking Component
 
   self.aim = Quat.Identity()

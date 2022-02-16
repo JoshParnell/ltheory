@@ -4,13 +4,14 @@ local Pulse = require('Game.Entities.Pulse')
 function Entity:addProjectiles ()
   assert(not self.projectiles)
   self.projectiles = {}
-  self.projectileRefs = Env.Util.RefTable()
+  self:register(Event.Update, Entity.updateProjectiles)
+  -- self:register(Event.Update, Entity.updateProjectilesPost)
 end
 
-function Entity:addProjectile (child, source)
+function Entity:addProjectile (source)
   assert(self.projectiles)
   local e = Pulse:new()
-  e.source = self.projectileRefs:acquire(source)
+  e.source = IncRef(source)
   insert(self.projectiles, e)
   return e
 end
@@ -19,7 +20,10 @@ function Entity:renderProjectiles (state)
   Pulse.Render(self.projectiles, state)
 end
 
-function Entity:updateProjectiles (dt)
-  Pulse.UpdatePrePhysics(self.projectiles, dt)
-  -- Pulse.Update(self.projectiles)
+function Entity:updateProjectiles (state)
+  Pulse.UpdatePrePhysics(self.projectiles, state.dt)
+end
+
+function Entity:updateProjectilesPost (state)
+  Pulse.UpdatePostPhysics(self.projectiles, state.dt)
 end

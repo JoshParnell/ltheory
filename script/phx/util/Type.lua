@@ -136,14 +136,14 @@ function TypeT:new ()
   -- Block size is chosen such that each block is one page of memory
   local blockSize = max(1, floor(0x1000 / self:getSize()))
   self.pool = MemPool.Create(self:getSize(), blockSize)
-  self.new = function (T)
-    local instance = ffi.cast(T.ptrName, MemPool.Alloc(T.pool))
-    for i = 1, #T.onConstruct do T.onConstruct[i](instance) end
+  self.new = function ()
+    local instance = ffi.cast(self.ptrName, MemPool.Alloc(self.pool))
+    for i = 1, #self.onConstruct do self.onConstruct[i](instance) end
     return instance
   end
-  self.delete = function (T, instance)
-    for i = 1, #T.onDestruct do T.onDestruct[i](instance) end
-    MemPool.Dealloc(T.pool, instance)
+  self.delete = function (instance)
+    for i = 1, #self.onDestruct do self.onDestruct[i](instance) end
+    MemPool.Dealloc(self.pool, instance)
   end
   return self:new()
 end

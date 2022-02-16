@@ -71,4 +71,11 @@ function Event.Update (dt)
   }
 end
 
+function Event.UpdatePost (dt)
+  return {
+    type = Event.UpdatePost,
+    dt = dt,
+  }
+end
+
 return Event

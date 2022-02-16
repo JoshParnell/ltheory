@@ -1,6 +1,6 @@
 local Entity = require('Game.Entity')
 
-local Pulse = CType.Struct('Pulse', Entity)
+local Pulse = CType.Struct('Pulse')
 Pulse:add(CType.Int32,   'source' )
 Pulse:add(CType.Vec3f,   'pos'    )
 Pulse:add(CType.Vec3f,   'vel'    )
@@ -34,6 +34,7 @@ end)
 
 Pulse:addOnDestruct(function (self)
   self.matrix:free()
+  DecRef(self.source)
 end)
 
 Pulse:define()
@@ -108,15 +109,15 @@ function Pulse.UpdatePrePhysics (ents, dt)
   Profiler.End()
 end
 
-function Pulse.Update (ents, dt)
-  Profiler.Begin('Pulse.Update')
+function Pulse.UpdatePostPhysics (ents, dt)
+  Profiler.Begin('Pulse.UpdatePostPhysics')
   local restitution = 0.4 * Config.game.pulseSize
   for i = #ents, 1, -1 do
     local self = ents[i]
     local hit = Physics.QueryPoint(self.pos.x, self.pos.y, self.pos.z)
     if hit ~= 0 and hit ~= self.source then
-      local hitEnt = RefGet(hit)
-      hitEnt:damage(Config.game.pulseDamage, RefGet(self.source))
+      local hitEnt = Deref(hit)
+      hitEnt:damage(Config.game.pulseDamage, Deref(self.source))
       ents[i] = ents[#ents]
       ents[#ents] = nil
       self:delete()
