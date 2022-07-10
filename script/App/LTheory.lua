@@ -26,6 +26,24 @@ function LTheory:generate ()
     ship:setOwner(self.player)
     self.system:addChild(ship)
     self.player:setControlling(ship)
+
+    -- player escorts
+    local ships = {}
+    for i = 1, 100 do
+      local escort = self.system:spawnShip()
+      local offset = rng:getSphere():scale(100)
+      escort:setPos(ship:getPos() + offset)
+      escort:setOwner(self.player)
+      escort:pushAction(Actions.Escort(ship, offset))
+      insert(ships, escort)
+    end
+
+    for i = 1, #ships do
+      local j = rng:getInt(1, #ships)
+      if i ~= j then
+        -- ships[i]:pushAction(Actions.Attack(ships[j]))
+      end
+    end
   end
 
   for i = 1, 1 do
@@ -40,7 +58,7 @@ function LTheory:generate ()
     self.system:spawnAsteroidField(500, 10)
   end
 
-  for i = 1, 1 do
+  for i = 1, 0 do
     self.system:spawnPlanet()
   end
 end

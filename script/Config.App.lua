@@ -25,7 +25,7 @@ local goodSeeds = {
 
 Config.gen = {
   seedGlobal = nil, -- Set to force deterministic global RNG
-  seedSystem = goodSeeds[2], -- Set to force deterministic system generation
+  seedSystem = nil, -- Set to force deterministic system generation
 
   origin     = Vec3f(0, 0, 0), -- Set far from zero to test engine precision
   nFields    = 20,

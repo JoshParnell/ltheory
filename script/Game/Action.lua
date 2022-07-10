@@ -46,14 +46,14 @@ function Action:flyToward (e, targetPos, targetForward, targetUp)
   if dist < 1e-6 then return end
   course = course - e:getVelocity():scale(kLeadTime)
 
-  -- TODO : Fwd alignment was causing this to fail in docking
-  local forward  = (course + targetForward:scale(0.0)):normalize()
+  -- TODO : Fwd alignment can cause docking failure
+  local forward  = (course + targetForward:scale(1.0)):normalize()
   local yawPitch = e:getForward():cross(forward)
   local roll     = e:getUp():cross(targetUp)
 
-  c.forward = expMap(2.0 * e:getRight():dot(course))
-  c.right = expMap(2.0 * e:getUp():dot(course))
-  c.up = expMap(2.0 * e:getForward():dot(course))
+  c.forward = expMap(2.0 * e:getForward():dot(forward))
+  c.right = expMap(2.0 * e:getRight():dot(forward))
+  c.up = expMap(2.0 * e:getUp():dot(forward))
   c.yaw = expMap(-10.0 * e:getUp():dot(yawPitch))
   c.pitch = expMap(10.0 * e:getRight():dot(yawPitch))
   c.roll = expMap(-10.0 * e:getForward():dot(roll))
