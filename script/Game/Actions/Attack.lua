@@ -53,16 +53,7 @@ function Attack:onUpdateActive (e, dt)
   local yawPitch = e:getForward():cross(forward)
   local roll     = e:getUp():cross(target:getUp())
 
-  course = course - e:getVelocity():scale(kVelFactor)
-  e.thrustRight   = expMap(  2.0 * e:getRight():dot(course))
-  e.thrustUp      = expMap(  2.0 * e:getUp():dot(course))
-  e.thrustForward = expMap(  2.0 * e:getForward():dot(course))
-  e.thrustYaw     = expMap(-10.0 * e:getUp():dot(yawPitch))
-  e.thrustPitch   = expMap( 10.0 * e:getRight():dot(yawPitch))
-  e.thrustRoll    = expMap(  0.0 * e:getForward():dot(roll))
-  if Config.game.aiUsesBoost then
-    e.thrustBoost = 1.0 - exp(-max(0.0, (dist / 1000.0) - 1.0))
-  end
+  self:flyToward(e, targetPos, forward, target:getUp())
 end
 
 function Attack:onUpdatePassive (e, dt)
@@ -70,8 +61,8 @@ function Attack:onUpdatePassive (e, dt)
   if align < 0.25 then return end
   local firing = Config.game.aiFire(dt, rng)
   for turret in e:iterSocketsByType(SocketType.Turret) do
-    -- TODO : Fix
-    turret:aimAt(self.target, firing)
+    turret:aimAtTarget(self.target, self.target:getPos())
+    if firing then turret:fire() end
   end
 end
 

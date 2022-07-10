@@ -79,7 +79,7 @@ Config.game = {
   invertPitch            = false,
 
   aiUsesBoost            = true,
-  aiFire                 = function (dt, rng) return (rng:getExp() ^ 1 < dt ^ 1) and 1.0 or 0.0 end,
+  aiFire                 = function (dt, rng) return rng:getExp() < dt end,
 
   dockRange              = 50,
 }

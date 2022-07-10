@@ -51,6 +51,14 @@ function Entity:plug (child)
     if socket.type == type and socket.child == nil then
       socket.child = child
       self:attach(child, socket.pos, Quat.Identity())
+
+      if type == SocketType.Turret then
+        self.socketRangeMin = min(self.socketRangeMin, child.projRange)
+        self.socketRangeMax = max(self.socketRangeMax, child.projRange)
+        self.socketSpeedMin = min(self.socketSpeedMin, child.projSpeed)
+        self.socketSpeedMax = max(self.socketSpeedMax, child.projSpeed)
+      end
+
       return true
     end
   end
