@@ -51,7 +51,7 @@ Config.gen = {
 
 Config.game = {
   boostCost = 10,
-  rateOfFire = 100,
+  rateOfFire = 10,
 
   autoTarget             = false,
   pulseDamage            = 5,
@@ -79,7 +79,7 @@ Config.game = {
   invertPitch            = false,
 
   aiUsesBoost            = true,
-  aiFire                 = function (dt, rng) return rng:getExp() < dt end,
+  aiFire                 = function (dt, rng) return rng:getExp() ^ 2 < dt end,
 
   dockRange              = 50,
 }

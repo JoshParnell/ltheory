@@ -14,9 +14,9 @@ function Entity:damage (amount, source)
   assert(self.health)
   if self.health <= 0 then return end
   self.health = max(0, self.health - amount)
-  self:sendEvent(Event.Damaged, amount, source)
+  self:send(Event.Damaged(amount, source))
   if self.health <= 0 then
-    self:sendEvent(Event.Destroyed, source)
+    self:send(Event.Destroyed(source))
   end
 end
 

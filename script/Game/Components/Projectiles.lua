@@ -5,7 +5,7 @@ function Entity:addProjectiles ()
   assert(not self.projectiles)
   self.projectiles = {}
   self:register(Event.Update, Entity.updateProjectiles)
-  -- self:register(Event.Update, Entity.updateProjectilesPost)
+  self:register(Event.Update, Entity.updateProjectilesPost)
 end
 
 function Entity:addProjectile (source)
@@ -21,9 +21,9 @@ function Entity:renderProjectiles (state)
 end
 
 function Entity:updateProjectiles (state)
-  Pulse.UpdatePrePhysics(self.projectiles, state.dt)
+  Pulse.UpdatePrePhysics(self, self.projectiles, state.dt)
 end
 
 function Entity:updateProjectilesPost (state)
-  Pulse.UpdatePostPhysics(self.projectiles, state.dt)
+  Pulse.UpdatePostPhysics(self, self.projectiles, state.dt)
 end

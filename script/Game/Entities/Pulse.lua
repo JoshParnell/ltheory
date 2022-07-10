@@ -89,7 +89,7 @@ function Pulse.Render (ents, state)
   end
 end
 
-function Pulse.UpdatePrePhysics (ents, dt)
+function Pulse.UpdatePrePhysics (system, ents, dt)
   Profiler.Begin('Pulse.UpdatePre')
   local t = 1.0 - exp(-dt)
   for i = #ents, 1, -1 do
@@ -109,20 +109,44 @@ function Pulse.UpdatePrePhysics (ents, dt)
   Profiler.End()
 end
 
-function Pulse.UpdatePostPhysics (ents, dt)
+function Pulse.UpdatePostPhysics (system, ents, dt)
   Profiler.Begin('Pulse.UpdatePostPhysics')
   local restitution = 0.4 * Config.game.pulseSize
+  local ray = Ray()
+  ray.tMin = 0
+  ray.tMax = 1
+
   for i = #ents, 1, -1 do
     local self = ents[i]
-    local hit = Physics.QueryPoint(self.pos.x, self.pos.y, self.pos.z)
-    if hit ~= 0 and hit ~= self.source then
-      local hitEnt = Deref(hit)
-      hitEnt:damage(Config.game.pulseDamage, Deref(self.source))
-      ents[i] = ents[#ents]
-      ents[#ents] = nil
-      self:delete()
+
+    -- raycast
+    ray.px = self.pos.x
+    ray.py = self.pos.y
+    ray.pz = self.pos.z
+    ray.dirx = dt * self.vel.x
+    ray.diry = dt * self.vel.y
+    ray.dirz = dt * self.vel.z
+    local hit = system.physics:rayCast(ray).body
+
+    if hit ~= nil then
+      -- get parent rigid body
+      while hit:getParentBody() ~= nil do hit = hit:getParentBody() end
+      local hitEnt = Entity.fromRigidBody(hit)
+      local source = Deref(self.source)
+
+      -- don't collide with the socket that spawned me
+      if hitEnt ~= source then
+        -- do damage if the collidee has health
+        if hitEnt.health then hitEnt:damage(Config.game.pulseDamage, source) end
+
+        -- remove projectile
+        ents[i] = ents[#ents]
+        ents[#ents] = nil
+        self:delete()
+      end
     end
   end
+
   Profiler.End()
 end
 

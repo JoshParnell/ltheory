@@ -6,10 +6,13 @@
 
 local Entity = require('Game.Entity')
 
+local bodyToEntity = {}
+
 local function onAddedToParent (self, event)
   -- TODO : Should probably move this to the parent.
   if event.parent.physics ~= nil then
     event.parent.physics:addRigidBody(self.body)
+    bodyToEntity[ptrToKey(self.body)] = self
   end
 end
 
@@ -17,7 +20,12 @@ local function onRemovedFromParent (self, event)
   -- TODO : Should probably move this to the parent.
   if event.parent.physics ~= nil then
     event.parent.physics:removeRigidBody(self.body)
+    bodyToEntity[ptrToKey(self.body)] = nil
   end
+end
+
+function Entity.fromRigidBody (body)
+  return bodyToEntity[ptrToKey(body)]
 end
 
 function Entity:addRigidBody (isCollider, collisionMesh)
