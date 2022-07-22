@@ -5,6 +5,7 @@ local Ship = subclass(Entity, function (self, proto)
   self:addActions()
   self:addCapacitor(100, 10)
   self:addChildren()
+  self:addExplodable()
   self:addHealth(100, 10)
   self:addInventory(100)
   -- TODO : This will create a duplicate BSP because proto & RigidBody do not

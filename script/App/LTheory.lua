@@ -41,7 +41,7 @@ function LTheory:generate ()
     for i = 1, #ships do
       local j = rng:getInt(1, #ships)
       if i ~= j then
-        ships[i]:pushAction(Actions.Attack(ships[j]))
+        -- ships[i]:pushAction(Actions.Attack(ships[j]))
       end
     end
   end

@@ -74,10 +74,18 @@ end
 
 --------------------------------------------------------------------------------
 
+local function killThrust (self)
+  for thruster in self:iterSocketsByType(SocketType.Thruster) do
+    thruster.activationT = 0
+    thruster.boostT = 0
+  end
+end
+
 function Entity:addThrustController ()
   assert(not self.thrustController)
   self.thrustController = ThrustController()
   self:register(Event.Update, Entity.updateThrustController)
+  self:register(Event.Destroyed, killThrust)
 end
 
 function Entity:getThrustController ()
@@ -90,6 +98,7 @@ function Entity:hasThrustController ()
 end
 
 function Entity:updateThrustController (state)
+  if self:isDestroyed() then return end
   self.thrustController:update(self, state.dt)
 end
 
