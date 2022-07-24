@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "File.h"
 #include "Lua.h"
+#include "PhxString.h"
 
 #if WINDOWS
 extern "C" {
@@ -12,7 +13,7 @@ extern "C" {
 
 int main (int argc, char* argv[]) {
   Engine_Init(2, 1);
-  Lua* self = Lua_Create();
+  Lua* lua = Lua_Create();
   char const* entryPoint = "./script/Main.lua";
 
   if (!File_Exists(entryPoint))
@@ -22,11 +23,13 @@ int main (int argc, char* argv[]) {
       Fatal("can't find script entrypoint <%s>", entryPoint);
   }
 
-  Lua_SetBool(self, "__debug__", DEBUG > 0);
-  Lua_SetBool(self, "__embedded__", true);
-  Lua_SetNumber(self, "__checklevel__", CHECK_LEVEL);
-  Lua_DoFile(self, "./script/Main.lua");
-  Lua_Free(self);
+  Lua_SetBool(lua, "__debug__", DEBUG > 0);
+  Lua_SetBool(lua, "__embedded__", true);
+  Lua_SetNumber(lua, "__checklevel__", CHECK_LEVEL);
+  if (argc >= 2)
+    Lua_SetStr(lua, "__app__", argv[1]);
+  Lua_DoFile(lua, "./script/Main.lua");
+  Lua_Free(lua);
   Engine_Free();
   return 0;
 }

@@ -7,6 +7,7 @@ add_subdirectory (libphx)
 
 add_executable (lt "src/Main.cpp")
 phx_configure_output_dir (lt)
+phx_configure_target_properties (lt)
 
 target_compile_definitions (lt PRIVATE DEBUG=0)
 target_link_libraries (lt phx)

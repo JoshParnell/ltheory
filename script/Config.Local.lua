@@ -1,5 +1,3 @@
-Config.app = 'LTheory'
-
 Config.debug.instantJobs = true
 Config.debug.jobSpeed = 10000
 

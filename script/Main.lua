@@ -7,6 +7,7 @@ require('env.env')
 
 Env.Call(function ()
   require('phx.phx')
+  local app = __app__ or Config.app or 'ltheory'
   GlobalRestrict.On()
 
   dofile('./script/Config.App.lua')
@@ -35,6 +36,6 @@ Env.Call(function ()
     format('maxmcode=%d',   Config.jit.tune.maxMCode)
   )
 
-  require('App.' .. Config.app):run()
+  require('App.' .. app):run()
   GlobalRestrict.Off()
 end)
