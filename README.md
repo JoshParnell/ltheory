@@ -4,6 +4,8 @@ Limit Theory is a now-cancelled open world space simulation game.
 
 This repository is the game (not engine) code for the second generation of LT's development, when all work was migrated to C and Lua. For the older, C++/LTSL Limit Theory, see https://github.com/JoshParnell/ltheory-old.
 
+![LT Screenshot](./res/tex2d/screenshot.png)
+
 # Prerequisites
 
 To build Limit Theory, you'll need a few standard developer tools. All of them are available to download for free.
