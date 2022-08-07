@@ -173,7 +173,7 @@ function Test:showSimple ()
       for i = 1, 2 do
         HmGui.BeginScroll(200)
           HmGui.PushTextColor(0.1, 0.5, 1.0, 1.0)
-          HmGui.PushFont(Cache.Font('OperatorMono', 10))
+          HmGui.PushFont(Cache.Font('FiraMono', 10))
           local lines = code:split('\n')
           for _, line in ipairs(lines) do
             HmGui.Text(line)
@@ -231,12 +231,10 @@ end
 function Test:onDraw ()
   if useRenderer then
     self.renderer:start(self.resX, self.resY)
-    self.renderer:stop()
-    self.renderer:startUI()
     Viewport.Push(0, 0, self.resX, self.resY, true)
     HmGui.Draw()
     Viewport.Pop()
-    self.renderer:stopUI()
+    self.renderer:stop()
     self.renderer:present(0, 0, self.resX, self.resY)
   else
     HmGui.Draw()
