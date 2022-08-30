@@ -22,7 +22,7 @@ function DockControl:onEnable ()
 end
 
 function DockControl:onInput (state)
-  if ShipBindings.Dock:get() > 0 then
+  if ShipBindings.Undock:get() > 0 then -- Flat: use the new Undock input control
     self.player:getControlling():pushAction(Actions.Undock())
   end
 end
@@ -32,7 +32,7 @@ function DockControl:onDraw (focus, active)
   local x, y, sx, sy = self:getRectGlobal()
   UI.DrawEx.TextAdditive(
     'NovaMono',
-    'Press ??? to Undock',
+    'Press J to Undock', -- Flat: use the input control mapped to Undock
     16,
     x, y, sx, sy,
     1, 1, 1, 1,
