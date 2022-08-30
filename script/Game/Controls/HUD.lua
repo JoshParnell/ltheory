@@ -14,6 +14,7 @@ function HUD:onEnable ()
   -- TODO : Wtf does this do? Who wrote this?? WHY.
   local pCamera = self.gameView.camera
   local camera = self.gameView.camera
+  self.gameView:setOrbit(false) -- Flat: lock camera back to player ship when HUD is enabled (e.g., Dock -> Ship controls)
   camera:warp()
   camera:lerpFrom(pCamera.pos, pCamera.rot)
 end
