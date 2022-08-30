@@ -79,13 +79,66 @@ function LTheory:onInput ()
   self.canvas:input()
 end
 
+-- Flat: add basic Game Control menu items
+function LTheory:showGameCtrlInner ()
+  HmGui.BeginGroupY()
+  if HmGui.Button("Load Game") then
+    drawExitMenu = false
+  end
+  HmGui.SetSpacing(8)
+  if HmGui.Button("Save Game") then
+    drawExitMenu = false
+  end
+  HmGui.SetSpacing(8)
+  if HmGui.Button("Settings") then
+    drawExitMenu = false
+  end
+  HmGui.SetSpacing(8)
+  if HmGui.Button("Credits") then
+    drawExitMenu = false
+  end
+  HmGui.SetSpacing(8)
+  if HmGui.Button("Quit to Main Menu") then
+    drawExitMenu = false
+  end
+  HmGui.SetSpacing(8)
+  if HmGui.Button("Quit to Desktop") then
+    LTheory:quit()
+  end
+  HmGui.EndGroup()
+end
+
+-- Flat: add basic Game Control menu dialog
+function LTheory:showCtrlMenu ()
+  HmGui.BeginWindow("Game Control")
+    HmGui.TextEx(Cache.Font('Iceland', 20), 'Game Control', 0.3, 0.4, 0.5, 1.0)
+    HmGui.SetAlign(0.5, 0.5)
+    HmGui.SetSpacing(16)
+    self:showGameCtrlInner()
+  HmGui.EndWindow()
+  HmGui.SetAlign(0.5, 0.5)
+end
+
 function LTheory:onUpdate (dt)
   self.player:getRoot():update(dt)
   self.canvas:update(dt)
+
+  -- Flat: add basic Game Control menu (only "Quit to Desktop" actually works at the moment)
+  if Input.GetPressed(Button.Keyboard.Escape) then
+    drawExitMenu = not drawExitMenu
+  end
+  HmGui.Begin(self.resX, self.resY)
+    if drawExitMenu then
+      HmGui.BeginGroupStack()
+      self:showCtrlMenu()
+      HmGui.EndGroup()
+    end
+  HmGui.End()
 end
 
 function LTheory:onDraw ()
   self.canvas:draw(self.resX, self.resY)
+  HmGui.Draw() -- Flat: draw controls
 end
 
 return LTheory
