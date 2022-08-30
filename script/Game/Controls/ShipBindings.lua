@@ -54,6 +54,11 @@ local self = {
     WIP.Control.GamepadButton(Button.Gamepad.Y))
     :delta(),
 
+  Undock = WIP.Control.Or( -- Flat: add separate control for undocking from station
+    WIP.Control.Key(Button.Keyboard.J),
+    WIP.Control.GamepadButton(Button.Gamepad.A))
+    :delta(),
+
   SquadAttackTarget = WIP.Control.GamepadButton(Button.Gamepad.Up):delta(),
   SquadScramble     = WIP.Control.GamepadButton(Button.Gamepad.Down):delta(),
 }
